@@ -1,0 +1,203 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.atguigu.atcrowdfunding.dao.UserMapper">
+    <resultMap id="BaseResultMap" type="com.atguigu.atcrowdfunding.entity.User">
+        <id column="id" jdbcType="INTEGER" property="id"/>
+        <result column="create_date" jdbcType="TIMESTAMP" property="createDate"/>
+        <result column="email" jdbcType="VARCHAR" property="email"/>
+        <result column="name" jdbcType="VARCHAR" property="name"/>
+        <result column="password" jdbcType="VARCHAR" property="password"/>
+        <result column="update_date" jdbcType="TIMESTAMP" property="updateDate"/>
+        <result column="username" jdbcType="VARCHAR" property="username"/>
+    </resultMap>
+
+    <resultMap id="CollectionMap" type="com.atguigu.atcrowdfunding.entity.User">
+        <id column="id" jdbcType="INTEGER" property="id"/>
+        <result column="create_date" jdbcType="TIMESTAMP" property="createDate"/>
+        <result column="email" jdbcType="VARCHAR" property="email"/>
+        <result column="name" jdbcType="VARCHAR" property="name"/>
+        <result column="password" jdbcType="VARCHAR" property="password"/>
+        <result column="update_date" jdbcType="TIMESTAMP" property="updateDate"/>
+        <result column="username" jdbcType="VARCHAR" property="username"/>
+        <collection property="roles"
+                    select="com.atguigu.atcrowdfunding.dao.JoinUserRoleMapper.queryByUserId"
+                    column="id"
+                    fetchType="lazy"
+                    ofType="com.atguigu.atcrowdfunding.entity.JoinUserRole">
+            <id column="id" jdbcType="INTEGER" property="userId"/>
+            <result column="id" jdbcType="INTEGER" property="id"/>
+            <result column="role_id" jdbcType="INTEGER" property="roleId"/>
+            <result column="create_date" jdbcType="TIMESTAMP" property="createDate"/>
+            <result column="update_date" jdbcType="TIMESTAMP" property="updateDate"/>
+        </collection>
+    </resultMap>
+
+    <resultMap id="PermissionMap" type="com.atguigu.atcrowdfunding.entity.User">
+        <id column="id" jdbcType="INTEGER" property="id"/>
+        <result column="create_date" jdbcType="TIMESTAMP" property="createDate"/>
+        <result column="email" jdbcType="VARCHAR" property="email"/>
+        <result column="name" jdbcType="VARCHAR" property="name"/>
+        <result column="password" jdbcType="VARCHAR" property="password"/>
+        <result column="update_date" jdbcType="TIMESTAMP" property="updateDate"/>
+        <result column="username" jdbcType="VARCHAR" property="username"/>
+        <result column="pid" jdbcType="VARCHAR" property="pid"/>
+        <collection property="permissions"
+                    select="com.atguigu.atcrowdfunding.dao.PermissionMapper.queryListByUserId"
+                    column="{userId=id,pid=pid}"
+                    fetchType="lazy"
+                    ofType="com.atguigu.atcrowdfunding.entity.Permission">
+            <id column="id" jdbcType="VARCHAR" property="id"/>
+            <result column="seqno" jdbcType="INTEGER" property="seqno"/>
+            <result column="pid" jdbcType="VARCHAR" property="pid"/>
+            <result column="NAME" jdbcType="VARCHAR" property="name"/>
+            <result column="url" jdbcType="VARCHAR" property="url"/>
+            <result column="icon" jdbcType="VARCHAR" property="icon"/>
+            <result column="LEVEL" jdbcType="INTEGER" property="level"/>
+            <result column="state" jdbcType="INTEGER" property="state"/>
+            <result column="create_date" jdbcType="TIMESTAMP" property="createDate"/>
+            <result column="update_date" jdbcType="TIMESTAMP" property="updateDate"/>
+        </collection>
+    </resultMap>
+
+    <sql id="Base_Column_List">
+    id, create_date, email, name, password, update_date, username
+  </sql>
+    <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from tbl_user
+        where id = #{id,jdbcType=INTEGER}
+    </select>
+    <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    delete from tbl_user
+    where id = #{id,jdbcType=INTEGER}
+  </delete>
+
+    <insert id="insert" parameterType="com.atguigu.atcrowdfunding.entity.User">
+    insert into tbl_user (id, create_date, email, 
+      name, password, update_date, 
+      username)
+    values (#{id,jdbcType=INTEGER}, #{createDate,jdbcType=TIMESTAMP}, #{email,jdbcType=VARCHAR}, 
+      #{name,jdbcType=VARCHAR}, #{password,jdbcType=VARCHAR}, #{updateDate,jdbcType=TIMESTAMP}, 
+      #{username,jdbcType=VARCHAR})
+  </insert>
+    <insert id="insertSelective" parameterType="com.atguigu.atcrowdfunding.entity.User">
+        insert into tbl_user
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="id != null">
+                id,
+            </if>
+            <if test="createDate != null  ">
+                create_date,
+            </if>
+            <if test="email != null and email != '' ">
+                email,
+            </if>
+            <if test="name != null and name != '' ">
+                name,
+            </if>
+            <if test="password != null and password != '' ">
+                password,
+            </if>
+            <if test="updateDate != null ">
+                update_date,
+            </if>
+            <if test="username != null and username != '' ">
+                username,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="id != null">
+                #{id,jdbcType=INTEGER},
+            </if>
+            <if test="createDate != null  ">
+                #{createDate,jdbcType=TIMESTAMP},
+            </if>
+            <if test="email != null and email != '' ">
+                #{email,jdbcType=VARCHAR},
+            </if>
+            <if test="name != null and name != '' ">
+                #{name,jdbcType=VARCHAR},
+            </if>
+            <if test="password != null and password != '' ">
+                #{password,jdbcType=VARCHAR},
+            </if>
+            <if test="updateDate != null ">
+                #{updateDate,jdbcType=TIMESTAMP},
+            </if>
+            <if test="username != null and username != '' ">
+                #{username,jdbcType=VARCHAR},
+            </if>
+        </trim>
+    </insert>
+    <update id="updateByPrimaryKeySelective" parameterType="com.atguigu.atcrowdfunding.entity.User">
+        update tbl_user
+        <set>
+            <if test="createDate != null  ">
+                create_date = #{createDate,jdbcType=TIMESTAMP},
+            </if>
+            <if test="email != null and email != '' ">
+                email = #{email,jdbcType=VARCHAR},
+            </if>
+            <if test="name != null and name != '' ">
+                name = #{name,jdbcType=VARCHAR},
+            </if>
+            <if test="password != null and password != '' ">
+                password = #{password,jdbcType=VARCHAR},
+            </if>
+            <if test="updateDate != null ">
+                update_date = #{updateDate,jdbcType=TIMESTAMP},
+            </if>
+            <if test="username != null and username != '' ">
+                username = #{username,jdbcType=VARCHAR},
+            </if>
+        </set>
+        where id = #{id,jdbcType=INTEGER}
+    </update>
+    <update id="updateByPrimaryKey" parameterType="com.atguigu.atcrowdfunding.entity.User">
+    update tbl_user
+    set create_date = #{createDate,jdbcType=TIMESTAMP},
+      email = #{email,jdbcType=VARCHAR},
+      name = #{name,jdbcType=VARCHAR},
+      password = #{password,jdbcType=VARCHAR},
+      update_date = #{updateDate,jdbcType=TIMESTAMP},
+      username = #{username,jdbcType=VARCHAR}
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+
+    <select id="queryByUsername" parameterType="java.lang.String" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from tbl_user
+        where username = #{username}
+    </select>
+
+    <select id="queryList" parameterType="com.atguigu.atcrowdfunding.entity.User" resultMap="BaseResultMap">
+        <if test="username != null and username != '' ">
+            <bind name="_username" value="'%'+username+'%'"/>
+        </if>
+        select
+        <include refid="Base_Column_List"/>
+        from tbl_user
+        <where>
+            <if test="username != null and username != '' ">
+                username like #{_username}
+            </if>
+        </where>
+        order by update_date desc
+    </select>
+
+    <select id="queryById" parameterType="integer" resultMap="CollectionMap">
+        select
+        <include refid="Base_Column_List"/>
+        from tbl_user
+        where id = #{id,jdbcType=INTEGER}
+    </select>
+    <!--pid只是为了PermissionMap中关联查询中queryListByUserId参数pid对应的列-->
+    <select id="queryUserAssignPermissionsById" parameterType="integer" resultMap="PermissionMap">
+        select
+        <include refid="Base_Column_List"/>,'' pid
+        from tbl_user
+        where id = #{id,jdbcType=INTEGER}
+    </select>
+</mapper>

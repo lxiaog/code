@@ -14,7 +14,7 @@ import org.springframework.test.context.web.WebAppConfiguration;
 @ContextConfiguration(locations = {
         "classpath:/spring/spring-data-source.xml",
         "classpath:/spring/spring-jpa.xml",
-        "classpath:/spring/spring-mvc.xml",
+        "classpath:/spring/springmvc-context.xml",
         "classpath:/spring/spring-mybatis.xml"
 
 })

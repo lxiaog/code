@@ -8,6 +8,7 @@ import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
+
 import java.util.Date;
 import java.util.List;
 /**
@@ -106,8 +107,65 @@ public interface PersonRepository extends JpaRepository<Person, Integer>, JpaSpe
     @Query(value = "select count(id) from jpa_person", nativeQuery = true)
     long getTotalCount();
 
+    /**
+     * update语句
+     */
     @Modifying
     @Query(value = "update Person p set p.email = :email where p.id = :id")
     int updateEmailById(@Param("id") Integer id, @Param("email") String email);
+
+    /**
+     * 全部字段查询 select 可以省略
+     */
+    @Query(value = "from Person p ")
+    List<Person> testJpqlAll();
+
+    /**
+     * 部分字段查询，需要person的构造方法初始化赋值
+     */
+    @Query(value = "select new Person (p.id,p.lastName) from Person p")
+    List<Person> testJpqlByIdAndLastName();
+
+    /**
+     * order by
+     */
+    @Query(value = "from Person p order by p.id desc ")
+    List<Person> testJpqlOrderBy();
+
+    /**
+     * group by
+     */
+    @Query(value = "select new Person (p.birth) from Person p group by p.birth")
+    List<Person> testJpqlGroupByBirth();
+
+    /**
+     * group by
+     */
+    @Query(value = "select new Person (p.address) from Person p group by p.address")
+    List<Person> testJpqlGroupByddressId();
+
+    /**
+     * 不会出现关联查询
+     * 两张表单独查询的语句
+     */
+    @Query(value = "select  p from Person p where p.address.id =1")
+    List<Person> testJpqlByAddressId();
+
+    /**
+     * 两条查询语句
+     * 一条是关联查询语句，但查询条件是 person.address_id =1
+     * 另一条是address表的查询语句，条件是address.id = 1
+     */
+    @Query(value = "select  p from Person p left join  p.address where p.address.id =1")
+    List<Person> testJpqlByAddressLeftJoin();
+
+    /**
+     * 只有一条关联查询语句
+     * 查询条件是address.id=1
+     */
+    @Query(value = "select  p from Person p left join fetch p.address where p.address.id =1")
+    List<Person> testJpqlByAddressIdFetch();
+
+
 
 }

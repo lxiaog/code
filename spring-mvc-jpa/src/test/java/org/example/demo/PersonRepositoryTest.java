@@ -30,7 +30,7 @@ import java.util.*;
 @ContextConfiguration(locations = {
         "classpath:/spring/spring-data-source.xml",
         "classpath:/spring/spring-jpa.xml",
-        "classpath:/spring/spring-mvc.xml",
+        "classpath:/spring/springmvc-context.xml",
         "classpath:/spring/spring-mybatis.xml"
 
 })
@@ -58,7 +58,7 @@ public class PersonRepositoryTest {
     private OrderRepository orderRepository;
 
     @Test
-    public void testOneToMany(){
+    public void testOneToMany() {
         Person person = new Person();
         person.setBirth(new Date());
         person.setEmail("onoToMany@jpa.com");
@@ -81,7 +81,7 @@ public class PersonRepositoryTest {
         Set<Order> set = new HashSet<>();
         set.add(order);
         set.add(order1);
-        person.setOrders(set);
+//        person.setOrders(set);
 
         orderRepository.save(order);
         orderRepository.save(order1);
@@ -216,6 +216,27 @@ public class PersonRepositoryTest {
     public void test() {
         Person person = personRepository.one();
         log.error(person.toString());
+    }
+
+    @Test
+    public void testJpql() {
+//        List<Person> personList1 = personRepository.testJpqlByAddressId();
+//        log.error("personList1="+personList1.size());
+//        List<Person> personList2 = personRepository.testJpqlByAddressLeftJoin();
+//        log.error("personList2="+personList2.size());
+//        List<Person> personList3 = personRepository.testJpqlByAddressIdFetch();
+//        log.error("personList3="+personList3.size());
+        List<Person> orderByList = personRepository.testJpqlOrderBy();
+        log.error("order by " + orderByList.size());
+        List<Person> groupByList = personRepository.testJpqlGroupByBirth();
+        log.error("group by " + groupByList.size());
+
+    }
+
+    @Test
+    public void testSubSelect() {
+        List<Order> orders = orderRepository.testSubSelect();
+        log.error("" + orders.size());
     }
 
 

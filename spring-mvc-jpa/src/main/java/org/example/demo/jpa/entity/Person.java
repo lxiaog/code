@@ -1,6 +1,7 @@
 package org.example.demo.jpa.entity;
 
-import lombok.Data;
+import lombok.Getter;
+import lombok.Setter;
 import lombok.experimental.Accessors;
 
 import javax.persistence.*;
@@ -9,7 +10,8 @@ import java.util.Set;
 
 @Table(name = "jpa_person")
 @Entity
-@Data
+@Setter
+@Getter
 @Accessors(chain = true)
 public class Person {
     @Id
@@ -22,11 +24,27 @@ public class Person {
     private Date birth;
 
     @JoinColumn(name = "address_id")
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     private Address address;
 
+    public Person(Date birth) {
+        this.birth = birth;
+    }
+
+    public Person(Address address) {
+        this.address = address;
+    }
+
+    public Person(Integer id, String lastName) {
+        this.id = id;
+        this.lastName = lastName;
+    }
+
+    public Person() {
+    }
+
 //    @JoinColumn(name = "person_id")
-    @OneToMany(fetch = FetchType.EAGER,mappedBy = "person")
+    @OneToMany(fetch = FetchType.EAGER, mappedBy = "person")
     private Set<Order> orders;
 
 //    private Integer addressId;

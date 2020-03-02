@@ -1,6 +1,7 @@
 package org.example.demo.jpa.entity;
 
-import lombok.Data;
+import lombok.Getter;
+import lombok.Setter;
 import lombok.experimental.Accessors;
 
 import javax.persistence.*;
@@ -8,7 +9,8 @@ import java.util.Date;
 
 @Entity
 @Table(name = "jpa_order")
-@Data
+@Setter
+@Getter
 @Accessors(chain = true)
 public class Order {
     @Id

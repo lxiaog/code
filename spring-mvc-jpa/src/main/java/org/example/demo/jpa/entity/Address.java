@@ -1,13 +1,16 @@
 package org.example.demo.jpa.entity;
 
-import lombok.Data;
+
+import lombok.Getter;
+import lombok.Setter;
 import lombok.experimental.Accessors;
 
 import javax.persistence.*;
 
 @Entity
 @Table(name = "jpa_address")
-@Data
+@Setter
+@Getter
 @Accessors(chain = true)
 public class Address {
     @Id

@@ -1,0 +1,308 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.atguigu.atcrowdfunding.dao.PermissionMapper">
+    <resultMap id="BaseResultMap" type="com.atguigu.atcrowdfunding.entity.Permission">
+        <id column="id" jdbcType="VARCHAR" property="id"/>
+        <result column="seqno" jdbcType="INTEGER" property="seqno"/>
+        <result column="pid" jdbcType="VARCHAR" property="pid"/>
+        <result column="NAME" jdbcType="VARCHAR" property="name"/>
+        <result column="url" jdbcType="VARCHAR" property="url"/>
+        <result column="icon" jdbcType="VARCHAR" property="icon"/>
+        <result column="LEVEL" jdbcType="INTEGER" property="level"/>
+        <result column="state" jdbcType="INTEGER" property="state"/>
+        <result column="create_date" jdbcType="TIMESTAMP" property="createDate"/>
+        <result column="update_date" jdbcType="TIMESTAMP" property="updateDate"/>
+    </resultMap>
+
+    <resultMap id="CollectionMap" type="com.atguigu.atcrowdfunding.entity.Permission">
+        <id column="id" jdbcType="VARCHAR" property="id"/>
+        <result column="seqno" jdbcType="INTEGER" property="seqno"/>
+        <result column="pid" jdbcType="VARCHAR" property="pid"/>
+        <result column="name" jdbcType="VARCHAR" property="name"/>
+        <result column="url" jdbcType="VARCHAR" property="url"/>
+        <result column="icon" jdbcType="VARCHAR" property="icon"/>
+        <result column="level" jdbcType="INTEGER" property="level"/>
+        <result column="state" jdbcType="INTEGER" property="state"/>
+        <result column="create_date" jdbcType="TIMESTAMP" property="createDate"/>
+        <result column="update_date" jdbcType="TIMESTAMP" property="updateDate"/>
+        <collection property="children"
+                    select="com.atguigu.atcrowdfunding.dao.PermissionMapper.queryListByPid"
+                    column="id"
+                    fetchType="eager"
+                    ofType="com.atguigu.atcrowdfunding.entity.Permission">
+            <id column="id" jdbcType="VARCHAR" property="pid"/>
+            <result column="id" jdbcType="VARCHAR" property="id"/>
+            <result column="seqno" jdbcType="INTEGER" property="seqno"/>
+            <result column="name" jdbcType="VARCHAR" property="name"/>
+            <result column="url" jdbcType="VARCHAR" property="url"/>
+            <result column="icon" jdbcType="VARCHAR" property="icon"/>
+            <result column="level" jdbcType="INTEGER" property="level"/>
+            <result column="state" jdbcType="INTEGER" property="state"/>
+            <result column="create_date" jdbcType="TIMESTAMP" property="createDate"/>
+            <result column="update_date" jdbcType="TIMESTAMP" property="updateDate"/>
+        </collection>
+    </resultMap>
+    <!--角色已分配的权限checked标记为true-->
+    <resultMap id="RoleAssignPermissionsCheckMap" type="com.atguigu.atcrowdfunding.entity.Permission">
+        <id column="id" jdbcType="VARCHAR" property="id"/>
+        <result column="seqno" jdbcType="INTEGER" property="seqno"/>
+        <result column="pid" jdbcType="VARCHAR" property="pid"/>
+        <result column="name" jdbcType="VARCHAR" property="name"/>
+        <result column="url" jdbcType="VARCHAR" property="url"/>
+        <result column="icon" jdbcType="VARCHAR" property="icon"/>
+        <result column="level" jdbcType="INTEGER" property="level"/>
+        <result column="state" jdbcType="INTEGER" property="state"/>
+        <result column="create_date" jdbcType="TIMESTAMP" property="createDate"/>
+        <result column="update_date" jdbcType="TIMESTAMP" property="updateDate"/>
+        <result column="role_id" jdbcType="INTEGER" property="roleId"/>
+        <result column="checked" property="checked"/>
+        <collection property="children"
+                    select="com.atguigu.atcrowdfunding.dao.PermissionMapper.queryListChecked"
+                    column="{roleId=role_id,pid=id}"
+                    fetchType="eager"
+                    ofType="com.atguigu.atcrowdfunding.entity.Permission">
+            <id column="id" jdbcType="VARCHAR" property="pid"/>
+            <result column="id" jdbcType="VARCHAR" property="id"/>
+            <result column="seqno" jdbcType="INTEGER" property="seqno"/>
+            <result column="name" jdbcType="VARCHAR" property="name"/>
+            <result column="url" jdbcType="VARCHAR" property="url"/>
+            <result column="icon" jdbcType="VARCHAR" property="icon"/>
+            <result column="level" jdbcType="INTEGER" property="level"/>
+            <result column="state" jdbcType="INTEGER" property="state"/>
+            <result column="create_date" jdbcType="TIMESTAMP" property="createDate"/>
+            <result column="update_date" jdbcType="TIMESTAMP" property="updateDate"/>
+            <result column="role_id" jdbcType="INTEGER" property="roleId"/>
+            <result column="checked" property="checked"/>
+        </collection>
+    </resultMap>
+    <!--查询用户所拥有的权限-->
+    <resultMap id="UserAssignPermissionsMap" type="com.atguigu.atcrowdfunding.entity.Permission">
+        <id column="id" jdbcType="VARCHAR" property="id"/>
+        <result column="seqno" jdbcType="INTEGER" property="seqno"/>
+        <result column="pid" jdbcType="VARCHAR" property="pid"/>
+        <result column="name" jdbcType="VARCHAR" property="name"/>
+        <result column="url" jdbcType="VARCHAR" property="url"/>
+        <result column="icon" jdbcType="VARCHAR" property="icon"/>
+        <result column="level" jdbcType="INTEGER" property="level"/>
+        <result column="state" jdbcType="INTEGER" property="state"/>
+        <result column="create_date" jdbcType="TIMESTAMP" property="createDate"/>
+        <result column="update_date" jdbcType="TIMESTAMP" property="updateDate"/>
+        <result column="user_id" jdbcType="INTEGER" property="userId"/>
+        <collection property="children"
+                    select="com.atguigu.atcrowdfunding.dao.PermissionMapper.queryListByUserId"
+                    column="{userId=user_id,pid=id}"
+                    fetchType="eager"
+                    ofType="com.atguigu.atcrowdfunding.entity.Permission">
+            <id column="id" jdbcType="VARCHAR" property="pid"/>
+            <result column="id" jdbcType="VARCHAR" property="id"/>
+            <result column="seqno" jdbcType="INTEGER" property="seqno"/>
+            <result column="name" jdbcType="VARCHAR" property="name"/>
+            <result column="url" jdbcType="VARCHAR" property="url"/>
+            <result column="icon" jdbcType="VARCHAR" property="icon"/>
+            <result column="level" jdbcType="INTEGER" property="level"/>
+            <result column="state" jdbcType="INTEGER" property="state"/>
+            <result column="create_date" jdbcType="TIMESTAMP" property="createDate"/>
+            <result column="update_date" jdbcType="TIMESTAMP" property="updateDate"/>
+            <result column="user_id" jdbcType="INTEGER" property="userId"/>
+        </collection>
+    </resultMap>
+
+
+    <sql id="Base_Column_List">
+    id, seqno, pid, NAME, url, icon, LEVEL, state, create_date, update_date
+  </sql>
+    <select id="selectByPrimaryKey" parameterType="java.lang.String" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from tbl_permission
+        where id = #{id,jdbcType=VARCHAR}
+    </select>
+    <delete id="deleteByPrimaryKey" parameterType="java.lang.String">
+    delete from tbl_permission
+    where id = #{id,jdbcType=VARCHAR}
+  </delete>
+    <insert id="insert" parameterType="com.atguigu.atcrowdfunding.entity.Permission">
+    insert into tbl_permission (id, seqno, pid,
+      NAME, url, icon, LEVEL,
+      state, create_date, update_date
+      )
+    values (#{id,jdbcType=VARCHAR}, #{seqno,jdbcType=INTEGER}, #{pid,jdbcType=VARCHAR},
+      #{name,jdbcType=VARCHAR}, #{url,jdbcType=VARCHAR}, #{icon,jdbcType=VARCHAR}, #{level,jdbcType=INTEGER},
+      #{state,jdbcType=INTEGER}, #{createDate,jdbcType=TIMESTAMP}, #{updateDate,jdbcType=TIMESTAMP}
+      )
+  </insert>
+    <insert id="insertSelective" parameterType="com.atguigu.atcrowdfunding.entity.Permission">
+        insert into tbl_permission
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="id != null">
+                id,
+            </if>
+            <if test="seqno != null">
+                seqno,
+            </if>
+            <if test="pid != null">
+                pid,
+            </if>
+            <if test="name != null">
+                NAME,
+            </if>
+            <if test="url != null">
+                url,
+            </if>
+            <if test="icon != null">
+                icon,
+            </if>
+            <if test="level != null">
+                LEVEL,
+            </if>
+            <if test="state != null">
+                state,
+            </if>
+            <if test="createDate != null">
+                create_date,
+            </if>
+            <if test="updateDate != null">
+                update_date,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="id != null">
+                #{id,jdbcType=VARCHAR},
+            </if>
+            <if test="seqno != null">
+                #{seqno,jdbcType=INTEGER},
+            </if>
+            <if test="pid != null">
+                #{pid,jdbcType=VARCHAR},
+            </if>
+            <if test="name != null">
+                #{name,jdbcType=VARCHAR},
+            </if>
+            <if test="url != null">
+                #{url,jdbcType=VARCHAR},
+            </if>
+            <if test="icon != null">
+                #{icon,jdbcType=VARCHAR},
+            </if>
+            <if test="level != null">
+                #{level,jdbcType=INTEGER},
+            </if>
+            <if test="state != null">
+                #{state,jdbcType=INTEGER},
+            </if>
+            <if test="createDate != null">
+                #{createDate,jdbcType=TIMESTAMP},
+            </if>
+            <if test="updateDate != null">
+                #{updateDate,jdbcType=TIMESTAMP},
+            </if>
+        </trim>
+    </insert>
+    <update id="updateByPrimaryKeySelective" parameterType="com.atguigu.atcrowdfunding.entity.Permission">
+        update tbl_permission
+        <set>
+            <if test="seqno != null">
+                seqno = #{seqno,jdbcType=INTEGER},
+            </if>
+            <if test="pid != null">
+                pid = #{pid,jdbcType=VARCHAR},
+            </if>
+            <if test="name != null">
+                NAME = #{name,jdbcType=VARCHAR},
+            </if>
+            <if test="url != null">
+                url = #{url,jdbcType=VARCHAR},
+            </if>
+            <if test="icon != null">
+                icon = #{icon,jdbcType=VARCHAR},
+            </if>
+            <if test="level != null">
+                LEVEL = #{level,jdbcType=INTEGER},
+            </if>
+            <if test="state != null">
+                state = #{state,jdbcType=INTEGER},
+            </if>
+            <if test="createDate != null">
+                create_date = #{createDate,jdbcType=TIMESTAMP},
+            </if>
+            <if test="updateDate != null">
+                update_date = #{updateDate,jdbcType=TIMESTAMP},
+            </if>
+        </set>
+        where id = #{id,jdbcType=VARCHAR}
+    </update>
+    <update id="updateByPrimaryKey" parameterType="com.atguigu.atcrowdfunding.entity.Permission">
+    update tbl_permission
+    set seqno = #{seqno,jdbcType=INTEGER},
+      pid = #{pid,jdbcType=VARCHAR},
+      NAME = #{name,jdbcType=VARCHAR},
+      url = #{url,jdbcType=VARCHAR},
+      icon = #{icon,jdbcType=VARCHAR},
+      LEVEL = #{level,jdbcType=INTEGER},
+      state = #{state,jdbcType=INTEGER},
+      create_date = #{createDate,jdbcType=TIMESTAMP},
+      update_date = #{updateDate,jdbcType=TIMESTAMP}
+    where id = #{id,jdbcType=VARCHAR}
+  </update>
+
+    <select id="queryUrlList" resultType="string">
+        select
+        url
+        from tbl_permission
+    </select>
+
+    <select id="queryListByPid" parameterType="java.lang.String" resultMap="CollectionMap">
+        select
+        <include refid="Base_Column_List"/>
+        from tbl_permission
+        where pid = #{pid}
+        order by seqno
+    </select>
+
+    <select id="queryListChecked" parameterType="map" resultMap="RoleAssignPermissionsCheckMap">
+        SELECT
+            tp.id,
+            tp.seqno,
+            tp.pid,
+            tp.NAME,
+            tp.url,
+            tp.icon,
+            tp.LEVEL,
+            tp.state,
+            tp.create_date,
+            tp.update_date,
+            #{roleId} as role_id,
+            IF( jpr.role_id = #{roleId}, TRUE, FALSE ) checked
+        FROM
+            tbl_permission tp
+            LEFT JOIN tbl_join_permission_role jpr ON jpr.permission_id = tp.id
+            WHERE tp.pid = #{pid}
+        ORDER BY
+            tp.seqno
+    </select>
+
+    <select id="queryListByUserId" parameterType="map" resultMap="UserAssignPermissionsMap">
+        SELECT
+	        tp.id,
+            tp.seqno,
+            tp.pid,
+            tp.NAME,
+            tp.url,
+            tp.icon,
+            tp.LEVEL,
+            tp.state,
+            tp.create_date,
+            tp.update_date,
+            #{userId} as user_id
+        FROM
+            tbl_permission tp,
+            tbl_join_permission_role jpr,
+            tbl_join_user_role jur
+            WHERE tp.id = jpr.permission_id
+            AND jpr.role_id = jur.role_id
+            AND jur.user_id = #{userId}
+            AND tp.pid = #{pid}
+            ORDER BY tp.seqno
+    </select>
+
+</mapper>

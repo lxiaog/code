@@ -1,0 +1,100 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.atguigu.atcrowdfunding.dao.JoinPermissionRoleMapper">
+    <resultMap id="BaseResultMap" type="com.atguigu.atcrowdfunding.entity.JoinPermissionRole">
+        <id column="role_id" jdbcType="INTEGER" property="roleId"/>
+        <id column="permission_id" jdbcType="VARCHAR" property="permissionId"/>
+        <result column="id" jdbcType="INTEGER" property="id"/>
+        <result column="create_date" jdbcType="TIMESTAMP" property="createDate"/>
+        <result column="update_date" jdbcType="TIMESTAMP" property="updateDate"/>
+    </resultMap>
+    <sql id="Base_Column_List">
+    role_id, permission_id, id, create_date, update_date
+  </sql>
+    <select id="selectByPrimaryKey" parameterType="map" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from tbl_join_permission_role
+        where role_id = #{roleId,jdbcType=INTEGER}
+        and permission_id = #{permissionId,jdbcType=VARCHAR}
+    </select>
+    <delete id="deleteByPrimaryKey" parameterType="map">
+    delete from tbl_join_permission_role
+    where role_id = #{roleId,jdbcType=INTEGER}
+      and permission_id = #{permissionId,jdbcType=VARCHAR}
+  </delete>
+    <insert id="insert" parameterType="com.atguigu.atcrowdfunding.entity.JoinPermissionRole">
+    insert into tbl_join_permission_role (role_id, permission_id, id, 
+      create_date, update_date)
+    values (#{roleId,jdbcType=INTEGER}, #{permissionId,jdbcType=VARCHAR}, #{id,jdbcType=INTEGER}, 
+      #{createDate,jdbcType=TIMESTAMP}, #{updateDate,jdbcType=TIMESTAMP})
+  </insert>
+    <insert id="insertSelective" parameterType="com.atguigu.atcrowdfunding.entity.JoinPermissionRole">
+        insert into tbl_join_permission_role
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="roleId != null">
+                role_id,
+            </if>
+            <if test="permissionId != null">
+                permission_id,
+            </if>
+            <if test="id != null">
+                id,
+            </if>
+            <if test="createDate != null">
+                create_date,
+            </if>
+            <if test="updateDate != null">
+                update_date,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="roleId != null">
+                #{roleId,jdbcType=INTEGER},
+            </if>
+            <if test="permissionId != null">
+                #{permissionId,jdbcType=VARCHAR},
+            </if>
+            <if test="id != null">
+                #{id,jdbcType=INTEGER},
+            </if>
+            <if test="createDate != null">
+                #{createDate,jdbcType=TIMESTAMP},
+            </if>
+            <if test="updateDate != null">
+                #{updateDate,jdbcType=TIMESTAMP},
+            </if>
+        </trim>
+    </insert>
+    <update id="updateByPrimaryKeySelective" parameterType="com.atguigu.atcrowdfunding.entity.JoinPermissionRole">
+        update tbl_join_permission_role
+        <set>
+            <if test="id != null">
+                id = #{id,jdbcType=INTEGER},
+            </if>
+            <if test="createDate != null">
+                create_date = #{createDate,jdbcType=TIMESTAMP},
+            </if>
+            <if test="updateDate != null">
+                update_date = #{updateDate,jdbcType=TIMESTAMP},
+            </if>
+        </set>
+        where role_id = #{roleId,jdbcType=INTEGER}
+        and permission_id = #{permissionId,jdbcType=VARCHAR}
+    </update>
+    <update id="updateByPrimaryKey" parameterType="com.atguigu.atcrowdfunding.entity.JoinPermissionRole">
+    update tbl_join_permission_role
+    set id = #{id,jdbcType=INTEGER},
+      create_date = #{createDate,jdbcType=TIMESTAMP},
+      update_date = #{updateDate,jdbcType=TIMESTAMP}
+    where role_id = #{roleId,jdbcType=INTEGER}
+      and permission_id = #{permissionId,jdbcType=VARCHAR}
+  </update>
+
+
+    <delete id="deleteByRoleId" parameterType="integer">
+    delete from tbl_join_permission_role
+    where role_id = #{roleId}
+  </delete>
+
+</mapper>

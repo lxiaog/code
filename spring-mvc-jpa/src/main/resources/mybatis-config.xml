@@ -18,8 +18,9 @@
         <setting name="cacheEnabled" value="true"/>
         <!--打印SQL日志-->
         <!--<setting name="logImpl" value="STDOUT_LOGGING"/>-->
-        <setting name="logPrefix" value="dao."/>
+        <!--<setting name="logPrefix" value="dao."/>-->
     </settings>
+
     <!--<plugins>-->
     <!--<plugin interceptor="com.github.pagehelper.PageHelper">-->
     <!--<property name="dialect" value="MySql"></property>-->
