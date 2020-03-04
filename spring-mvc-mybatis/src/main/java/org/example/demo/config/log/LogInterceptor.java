@@ -17,7 +17,6 @@ import java.util.UUID;
  * @author xiaog.li
  * @date 2020年1月16日15:17:27
  */
-@Component
 @Slf4j
 public class LogInterceptor implements HandlerInterceptor {
 

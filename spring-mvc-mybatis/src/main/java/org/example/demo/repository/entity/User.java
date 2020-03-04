@@ -2,20 +2,20 @@ package org.example.demo.repository.entity;
 
 import java.util.Date;
 
-public class User {
+public class User extends BasePage{
     private Integer id;
 
-    private String userName;
+    private Date createDate;
 
-    private String realName;
+    private String email;
 
-    private String sex;
+    private String name;
 
-    private String tel;
+    private String password;
 
-    private Date createTime;
+    private Date updateDate;
 
-    private Date updateTime;
+    private String username;
 
     public Integer getId() {
         return id;
@@ -25,51 +25,51 @@ public class User {
         this.id = id;
     }
 
-    public String getUserName() {
-        return userName;
+    public Date getCreateDate() {
+        return createDate;
     }
 
-    public void setUserName(String userName) {
-        this.userName = userName == null ? null : userName.trim();
+    public void setCreateDate(Date createDate) {
+        this.createDate = createDate;
     }
 
-    public String getRealName() {
-        return realName;
+    public String getEmail() {
+        return email;
     }
 
-    public void setRealName(String realName) {
-        this.realName = realName == null ? null : realName.trim();
+    public void setEmail(String email) {
+        this.email = email == null ? null : email.trim();
     }
 
-    public String getSex() {
-        return sex;
+    public String getName() {
+        return name;
     }
 
-    public void setSex(String sex) {
-        this.sex = sex == null ? null : sex.trim();
+    public void setName(String name) {
+        this.name = name == null ? null : name.trim();
     }
 
-    public String getTel() {
-        return tel;
+    public String getPassword() {
+        return password;
     }
 
-    public void setTel(String tel) {
-        this.tel = tel == null ? null : tel.trim();
+    public void setPassword(String password) {
+        this.password = password == null ? null : password.trim();
     }
 
-    public Date getCreateTime() {
-        return createTime;
+    public Date getUpdateDate() {
+        return updateDate;
     }
 
-    public void setCreateTime(Date createTime) {
-        this.createTime = createTime;
+    public void setUpdateDate(Date updateDate) {
+        this.updateDate = updateDate;
     }
 
-    public Date getUpdateTime() {
-        return updateTime;
+    public String getUsername() {
+        return username;
     }
 
-    public void setUpdateTime(Date updateTime) {
-        this.updateTime = updateTime;
+    public void setUsername(String username) {
+        this.username = username == null ? null : username.trim();
     }
 }

@@ -16,16 +16,27 @@ public class UserServiceImpl implements UserService {
     @Autowired
     private UserMapper userMapper;
 
+
     @Override
-    public Object add() {
-        User user = new User();
-        user.setUserName("admin");
-        user.setRealName("管理员");
-        user.setSex("男");
-        user.setTel("13118398056");
-        user.setCreateTime(new Date());
-        user.setUpdateTime(new Date());
-        userMapper.insert(user);
-        return "add user success";
+    public Object add(User user) {
+        user.setCreateDate(new Date());
+        user.setUpdateDate(new Date());
+        user.setPassword("admin=admin");
+        int row = userMapper.insertSelective(user);
+        if (row==1){
+            log.info("获取自增主键id="+user.getId());
+            return "新增成功";
+        }
+        return "新增失败";
+    }
+
+    @Override
+    public Object delete(User user) {
+        return 0;
+    }
+
+    @Override
+    public Object update(User user) {
+        return 0;
     }
 }

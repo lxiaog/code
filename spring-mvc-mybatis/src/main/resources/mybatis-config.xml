@@ -14,15 +14,21 @@
 
         <!-- 开启驼峰命名转换:Table{create_time} -> Entity{createTime} -->
         <setting name="mapUnderscoreToCamelCase" value="true"/>
-
+        <!--开启一级缓存-->
         <setting name="cacheEnabled" value="true"/>
         <!--打印SQL日志-->
         <!--<setting name="logImpl" value="STDOUT_LOGGING"/>-->
-        <setting name="logPrefix" value="dao."/>
+        <!--<setting name="logPrefix" value="dao."/>-->
     </settings>
-    <!--<plugins>-->
-    <!--<plugin interceptor="com.github.pagehelper.PageHelper">-->
-    <!--<property name="dialect" value="MySql"></property>-->
-    <!--</plugin>-->
-    <!--</plugins>-->
+    <!--配置多数据库-->
+    <!--type="DB_VENDOR" 别名-->
+    <!--就能根据数据库厂商表示，驱动自带的-->
+    <!--mapper.xml中指定databaseId名称-->
+    <databaseIdProvider type="DB_VENDOR">
+        <!-- 为不同的数据库厂商起别名 -->
+        <property name="MySQL" value="mysql"/>
+        <property name="Oracle" value="oracle"/>
+        <property name="SQL Server" value="sqlserver"/>
+    </databaseIdProvider>
+
 </configuration>
