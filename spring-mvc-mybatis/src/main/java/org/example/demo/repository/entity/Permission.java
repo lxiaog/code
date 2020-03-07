@@ -23,6 +23,18 @@ public class Permission extends BasePage{
 
     private Date updateDate;
 
+//    以下非数据库字段
+
+    private String stateMsg;
+
+    public String getStateMsg() {
+        return stateMsg;
+    }
+
+    public void setStateMsg(String stateMsg) {
+        this.stateMsg = stateMsg;
+    }
+
     public String getId() {
         return id;
     }

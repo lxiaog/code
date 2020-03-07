@@ -1,29 +1,65 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="org.example.demo.repository.dao.UserMapper">
-  <resultMap id="BaseResultMap" type="org.example.demo.repository.entity.User">
-    <id column="id" jdbcType="INTEGER" property="id" />
-    <result column="create_date" jdbcType="TIMESTAMP" property="createDate" />
-    <result column="email" jdbcType="VARCHAR" property="email" />
-    <result column="name" jdbcType="VARCHAR" property="name" />
-    <result column="password" jdbcType="VARCHAR" property="password" />
-    <result column="update_date" jdbcType="TIMESTAMP" property="updateDate" />
-    <result column="username" jdbcType="VARCHAR" property="username" />
-  </resultMap>
-  <sql id="Base_Column_List">
+    <!--配置二级缓存-->
+    <!--<cache eviction="LRU" flushInterval="60000" readOnly="false" size="1024"/>-->
+    <!--配置三级缓存 ehcache-->
+    <cache type="org.mybatis.caches.ehcache.EhcacheCache"/>
+    <!--
+       eviction:缓存的回收策略：
+          • LRU – 最近最少使用的：移除最长时间不被使用的对象。
+          • FIFO – 先进先出：按对象进入缓存的顺序来移除它们。
+          • SOFT – 软引用：移除基于垃圾回收器状态和软引用规则的对象。
+          • WEAK – 弱引用：更积极地移除基于垃圾收集器状态和弱引用规则的对象。
+          • 默认的是 LRU。
+       flushInterval：缓存刷新间隔
+          缓存多长时间清空一次，默认不清空，设置一个毫秒值
+       readOnly:是否只读：
+          true：只读；mybatis认为所有从缓存中获取数据的操作都是只读操作，不会修改数据。
+                 mybatis为了加快获取速度，直接就会将数据在缓存中的引用交给用户。不安全，速度快
+          false：非只读：mybatis觉得获取的数据可能会被修改。
+                mybatis会利用序列化&反序列的技术克隆一份新的数据给你。安全，速度慢
+       size：缓存存放多少元素；
+       type=""：指定自定义缓存的全类名；
+             实现Cache接口即可；
+
+       缓存相关的设置和属性
+          1、<setting name="cacheEnabled" value="true"/>  开启或关闭二级缓存，不影响一级缓存
+          2、每个select标签都有useCache="true"，默认都是true，
+              如果false,一级缓存可以使用,不使用二级缓存
+          3、每个insert、update、delete标签中flushCache="true" ,默认true,增删改查之后会清除缓存
+              会清空一级缓存、也会清空二级缓存
+          4、在select标签中  flushCache默认false,如果设置为true，一级和二级缓存都被清除
+          5、sqlSession.clearCache()
+              清除一级缓存
+          6、localCacheScope：本地缓存作用域 mybatis3.3之后
+              session：一级缓存，当前会话
+              STATEMENT：可以禁用一级缓存
+
+       -->
+    <resultMap id="BaseResultMap" type="org.example.demo.repository.entity.User">
+        <id column="id" jdbcType="INTEGER" property="id"/>
+        <result column="create_date" jdbcType="TIMESTAMP" property="createDate"/>
+        <result column="email" jdbcType="VARCHAR" property="email"/>
+        <result column="name" jdbcType="VARCHAR" property="name"/>
+        <result column="password" jdbcType="VARCHAR" property="password"/>
+        <result column="update_date" jdbcType="TIMESTAMP" property="updateDate"/>
+        <result column="username" jdbcType="VARCHAR" property="username"/>
+    </resultMap>
+    <sql id="Base_Column_List">
     id, create_date, email, name, password, update_date, username
   </sql>
-  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
-    select 
-    <include refid="Base_Column_List" />
-    from tbl_user
-    where id = #{id,jdbcType=INTEGER}
-  </select>
-  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from tbl_user
+        where id = #{id,jdbcType=INTEGER}
+    </select>
+    <delete id="deleteByPrimaryKey" flushCache="true" parameterType="java.lang.Integer">
     delete from tbl_user
     where id = #{id,jdbcType=INTEGER}
   </delete>
-  <insert id="insert" databaseId="orcale" parameterType="org.example.demo.repository.entity.User">
+    <insert id="insert" databaseId="orcale" parameterType="org.example.demo.repository.entity.User">
     insert into tbl_user (id, create_date, email, 
       name, password, update_date, 
       username)
@@ -31,85 +67,85 @@
       #{name,jdbcType=VARCHAR}, #{password,jdbcType=VARCHAR}, #{updateDate,jdbcType=TIMESTAMP}, 
       #{username,jdbcType=VARCHAR})
   </insert>
-  <!--useGeneratedKeys 使用自增主键-->
-  <!--keyProperty 设置增值主键的值赋给主键id-->
-  <insert id="insertSelective"
-          useGeneratedKeys="true"
-          keyProperty="id"
-          parameterType="org.example.demo.repository.entity.User">
-    insert into tbl_user
-    <trim prefix="(" suffix=")" suffixOverrides=",">
-      <if test="id != null">
-        id,
-      </if>
-      <if test="createDate != null">
-        create_date,
-      </if>
-      <if test="email != null">
-        email,
-      </if>
-      <if test="name != null">
-        name,
-      </if>
-      <if test="password != null">
-        password,
-      </if>
-      <if test="updateDate != null">
-        update_date,
-      </if>
-      <if test="username != null">
-        username,
-      </if>
-    </trim>
-    <trim prefix="values (" suffix=")" suffixOverrides=",">
-      <if test="id != null">
-        #{id,jdbcType=INTEGER},
-      </if>
-      <if test="createDate != null">
-        #{createDate,jdbcType=TIMESTAMP},
-      </if>
-      <if test="email != null">
-        #{email,jdbcType=VARCHAR},
-      </if>
-      <if test="name != null">
-        #{name,jdbcType=VARCHAR},
-      </if>
-      <if test="password != null">
-        #{password,jdbcType=VARCHAR},
-      </if>
-      <if test="updateDate != null">
-        #{updateDate,jdbcType=TIMESTAMP},
-      </if>
-      <if test="username != null">
-        #{username,jdbcType=VARCHAR},
-      </if>
-    </trim>
-  </insert>
-  <update id="updateByPrimaryKeySelective" parameterType="org.example.demo.repository.entity.User">
-    update tbl_user
-    <set>
-      <if test="createDate != null">
-        create_date = #{createDate,jdbcType=TIMESTAMP},
-      </if>
-      <if test="email != null">
-        email = #{email,jdbcType=VARCHAR},
-      </if>
-      <if test="name != null">
-        name = #{name,jdbcType=VARCHAR},
-      </if>
-      <if test="password != null">
-        password = #{password,jdbcType=VARCHAR},
-      </if>
-      <if test="updateDate != null">
-        update_date = #{updateDate,jdbcType=TIMESTAMP},
-      </if>
-      <if test="username != null">
-        username = #{username,jdbcType=VARCHAR},
-      </if>
-    </set>
-    where id = #{id,jdbcType=INTEGER}
-  </update>
-  <update id="updateByPrimaryKey" parameterType="org.example.demo.repository.entity.User">
+    <!--useGeneratedKeys 使用自增主键-->
+    <!--keyProperty 设置增值主键的值赋给主键id-->
+    <insert id="insertSelective"
+            useGeneratedKeys="true"
+            keyProperty="id"
+            parameterType="org.example.demo.repository.entity.User">
+        insert into tbl_user
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="id != null">
+                id,
+            </if>
+            <if test="createDate != null">
+                create_date,
+            </if>
+            <if test="email != null">
+                email,
+            </if>
+            <if test="name != null">
+                name,
+            </if>
+            <if test="password != null">
+                password,
+            </if>
+            <if test="updateDate != null">
+                update_date,
+            </if>
+            <if test="username != null">
+                username,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="id != null">
+                #{id,jdbcType=INTEGER},
+            </if>
+            <if test="createDate != null">
+                #{createDate,jdbcType=TIMESTAMP},
+            </if>
+            <if test="email != null">
+                #{email,jdbcType=VARCHAR},
+            </if>
+            <if test="name != null">
+                #{name,jdbcType=VARCHAR},
+            </if>
+            <if test="password != null">
+                #{password,jdbcType=VARCHAR},
+            </if>
+            <if test="updateDate != null">
+                #{updateDate,jdbcType=TIMESTAMP},
+            </if>
+            <if test="username != null">
+                #{username,jdbcType=VARCHAR},
+            </if>
+        </trim>
+    </insert>
+    <update id="updateByPrimaryKeySelective" parameterType="org.example.demo.repository.entity.User">
+        update tbl_user
+        <set>
+            <if test="createDate != null">
+                create_date = #{createDate,jdbcType=TIMESTAMP},
+            </if>
+            <if test="email != null">
+                email = #{email,jdbcType=VARCHAR},
+            </if>
+            <if test="name != null">
+                name = #{name,jdbcType=VARCHAR},
+            </if>
+            <if test="password != null">
+                password = #{password,jdbcType=VARCHAR},
+            </if>
+            <if test="updateDate != null">
+                update_date = #{updateDate,jdbcType=TIMESTAMP},
+            </if>
+            <if test="username != null">
+                username = #{username,jdbcType=VARCHAR},
+            </if>
+        </set>
+        where id = #{id,jdbcType=INTEGER}
+    </update>
+    <update id="updateByPrimaryKey" parameterType="org.example.demo.repository.entity.User">
     update tbl_user
     set create_date = #{createDate,jdbcType=TIMESTAMP},
       email = #{email,jdbcType=VARCHAR},
@@ -119,4 +155,16 @@
       username = #{username,jdbcType=VARCHAR}
     where id = #{id,jdbcType=INTEGER}
   </update>
+
+    <select id="queryMapById" parameterType="integer" resultType="map">
+        select
+        <include refid="Base_Column_List"/>
+        from tbl_user where id = #{id}
+    </select>
+
+    <select id="queryMaps" resultType="org.example.demo.repository.entity.User">
+        select
+        <include refid="Base_Column_List"/>
+        from tbl_user
+    </select>
 </mapper>

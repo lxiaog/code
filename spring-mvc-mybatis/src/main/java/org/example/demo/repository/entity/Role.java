@@ -1,6 +1,7 @@
 package org.example.demo.repository.entity;
 
 import java.util.Date;
+import java.util.List;
 
 public class Role extends BasePage{
     private Integer id;
@@ -10,6 +11,16 @@ public class Role extends BasePage{
     private Date createDate;
 
     private Date updateDate;
+
+    List<JoinPermissionRole> joinPermissionRoles;
+
+    public List<JoinPermissionRole> getJoinPermissionRoles() {
+        return joinPermissionRoles;
+    }
+
+    public void setJoinPermissionRoles(List<JoinPermissionRole> joinPermissionRoles) {
+        this.joinPermissionRoles = joinPermissionRoles;
+    }
 
     public Integer getId() {
         return id;
@@ -41,5 +52,15 @@ public class Role extends BasePage{
 
     public void setUpdateDate(Date updateDate) {
         this.updateDate = updateDate;
+    }
+
+    @Override
+    public String toString() {
+        return "Role{" +
+                "id=" + id +
+                ", roleName='" + roleName + '\'' +
+                ", createDate=" + createDate +
+                ", updateDate=" + updateDate +
+                '}';
     }
 }

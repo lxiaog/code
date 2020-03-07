@@ -2,6 +2,8 @@ package org.example.demo.repository.dao;
 
 import org.example.demo.repository.entity.Permission;
 
+import java.util.List;
+
 public interface PermissionMapper {
     int deleteByPrimaryKey(String id);
 
@@ -14,4 +16,6 @@ public interface PermissionMapper {
     int updateByPrimaryKeySelective(Permission record);
 
     int updateByPrimaryKey(Permission record);
+
+    List<Permission> queryList(Permission permission);
 }

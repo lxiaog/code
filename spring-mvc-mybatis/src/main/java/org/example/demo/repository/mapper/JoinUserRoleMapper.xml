@@ -1,88 +1,163 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="org.example.demo.repository.dao.JoinUserRoleMapper">
-  <resultMap id="BaseResultMap" type="org.example.demo.repository.entity.JoinUserRole">
-    <id column="user_id" jdbcType="INTEGER" property="userId" />
-    <id column="role_id" jdbcType="INTEGER" property="roleId" />
-    <result column="id" jdbcType="INTEGER" property="id" />
-    <result column="create_date" jdbcType="TIMESTAMP" property="createDate" />
-    <result column="update_date" jdbcType="TIMESTAMP" property="updateDate" />
-  </resultMap>
-  <sql id="Base_Column_List">
+    <resultMap id="BaseResultMap" type="org.example.demo.repository.entity.JoinUserRole">
+        <id column="user_id" jdbcType="INTEGER" property="userId"/>
+        <id column="role_id" jdbcType="INTEGER" property="roleId"/>
+        <result column="id" jdbcType="INTEGER" property="id"/>
+        <result column="create_date" jdbcType="TIMESTAMP" property="createDate"/>
+        <result column="update_date" jdbcType="TIMESTAMP" property="updateDate"/>
+    </resultMap>
+
+
+    <resultMap id="AssociationRoleMap" type="org.example.demo.repository.entity.JoinUserRole">
+        <id column="user_id" jdbcType="INTEGER" property="userId"/>
+        <id column="role_id" jdbcType="INTEGER" property="roleId"/>
+        <result column="id" jdbcType="INTEGER" property="id"/>
+        <result column="create_date" jdbcType="TIMESTAMP" property="createDate"/>
+        <result column="update_date" jdbcType="TIMESTAMP" property="updateDate"/>
+        <!--property 指定联合对象-->
+        <!--javaType 不可省略，联合对象类型-->
+        <association
+                property="role"
+                javaType="org.example.demo.repository.entity.Role">
+            <!--id标签中的column指定主表中的关联字段，property指定关联表中的关联字段-->
+            <id column="role_id" jdbcType="INTEGER" property="id"/>
+            <result column="role_name" jdbcType="VARCHAR" property="roleName"/>
+            <result column="create_date" jdbcType="TIMESTAMP" property="createDate"/>
+            <result column="update_date" jdbcType="TIMESTAMP" property="updateDate"/>
+        </association>
+    </resultMap>
+
+
+    <select id="queryAssociationRole" resultMap="AssociationRoleMap">
+    SELECT
+        jur.user_id,
+        jur.role_id,
+        jur.id,
+        jur.create_date,
+        jur.update_date,
+        tr.role_name ,
+        tr.create_date,
+        tr.update_date
+    FROM
+        tbl_join_user_role jur,
+        tbl_role tr
+    WHERE
+        jur.role_id = tr.id
+  </select>
+
+    <!--先查询JoinUserRole的数据-->
+    <!--再查询Role的数据-->
+    <!--无须写关联查询的SQL语句-->
+    <!--写单表查询的语句即可-->
+    <resultMap id="SwitchAssociationRoleMap" type="org.example.demo.repository.entity.JoinUserRole">
+        <id column="user_id" jdbcType="INTEGER" property="userId"/>
+        <id column="role_id" jdbcType="INTEGER" property="roleId"/>
+        <result column="id" jdbcType="INTEGER" property="id"/>
+        <result column="create_date" jdbcType="TIMESTAMP" property="createDate"/>
+        <result column="update_date" jdbcType="TIMESTAMP" property="updateDate"/>
+        <!--property:指定关联对象的名称-->
+        <!--javaType：指定关联对象的全类名-->
+        <!--fetchType="lazy"：指定懒加载查询-->
+        <!--select:指定mapper对应的查询方法-->
+        <!--column：指定列为select方法的专递的参数，-->
+        <!--单值直接column="col",多值 column"{key1=col1,key2=col2},必须是主表中存在的字段"-->
+        <association
+                property="role"
+                select="org.example.demo.repository.dao.RoleMapper.selectByPrimaryKey"
+                column="role_id"
+                fetchType="lazy"
+                javaType="org.example.demo.repository.entity.Role">
+            <!--id标签中的column指定主表中的关联字段，property指定关联表中的关联字段-->
+            <id column="role_id" jdbcType="INTEGER" property="id"/>
+            <result column="role_name" jdbcType="VARCHAR" property="roleName"/>
+            <result column="create_date" jdbcType="TIMESTAMP" property="createDate"/>
+            <result column="update_date" jdbcType="TIMESTAMP" property="updateDate"/>
+        </association>
+    </resultMap>
+
+    <select id="querySwitchAssociationRole" resultMap="SwitchAssociationRoleMap">
+        select
+        <include refid="Base_Column_List"/>
+        from tbl_join_user_role
+    </select>
+
+    <sql id="Base_Column_List">
     user_id, role_id, id, create_date, update_date
   </sql>
-  <select id="selectByPrimaryKey" parameterType="map" resultMap="BaseResultMap">
-    select 
-    <include refid="Base_Column_List" />
-    from tbl_join_user_role
-    where user_id = #{userId,jdbcType=INTEGER}
-      and role_id = #{roleId,jdbcType=INTEGER}
-  </select>
-  <delete id="deleteByPrimaryKey" parameterType="map">
+    <select id="selectByPrimaryKey" parameterType="map" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from tbl_join_user_role
+        where user_id = #{userId,jdbcType=INTEGER}
+        and role_id = #{roleId,jdbcType=INTEGER}
+    </select>
+    <delete id="deleteByPrimaryKey" parameterType="map">
     delete from tbl_join_user_role
     where user_id = #{userId,jdbcType=INTEGER}
       and role_id = #{roleId,jdbcType=INTEGER}
   </delete>
-  <insert id="insert" parameterType="org.example.demo.repository.entity.JoinUserRole">
+    <insert id="insert" parameterType="org.example.demo.repository.entity.JoinUserRole">
     insert into tbl_join_user_role (user_id, role_id, id, 
       create_date, update_date)
     values (#{userId,jdbcType=INTEGER}, #{roleId,jdbcType=INTEGER}, #{id,jdbcType=INTEGER}, 
       #{createDate,jdbcType=TIMESTAMP}, #{updateDate,jdbcType=TIMESTAMP})
   </insert>
-  <insert id="insertSelective" parameterType="org.example.demo.repository.entity.JoinUserRole">
-    insert into tbl_join_user_role
-    <trim prefix="(" suffix=")" suffixOverrides=",">
-      <if test="userId != null">
-        user_id,
-      </if>
-      <if test="roleId != null">
-        role_id,
-      </if>
-      <if test="id != null">
-        id,
-      </if>
-      <if test="createDate != null">
-        create_date,
-      </if>
-      <if test="updateDate != null">
-        update_date,
-      </if>
-    </trim>
-    <trim prefix="values (" suffix=")" suffixOverrides=",">
-      <if test="userId != null">
-        #{userId,jdbcType=INTEGER},
-      </if>
-      <if test="roleId != null">
-        #{roleId,jdbcType=INTEGER},
-      </if>
-      <if test="id != null">
-        #{id,jdbcType=INTEGER},
-      </if>
-      <if test="createDate != null">
-        #{createDate,jdbcType=TIMESTAMP},
-      </if>
-      <if test="updateDate != null">
-        #{updateDate,jdbcType=TIMESTAMP},
-      </if>
-    </trim>
-  </insert>
-  <update id="updateByPrimaryKeySelective" parameterType="org.example.demo.repository.entity.JoinUserRole">
-    update tbl_join_user_role
-    <set>
-      <if test="id != null">
-        id = #{id,jdbcType=INTEGER},
-      </if>
-      <if test="createDate != null">
-        create_date = #{createDate,jdbcType=TIMESTAMP},
-      </if>
-      <if test="updateDate != null">
-        update_date = #{updateDate,jdbcType=TIMESTAMP},
-      </if>
-    </set>
-    where user_id = #{userId,jdbcType=INTEGER}
-      and role_id = #{roleId,jdbcType=INTEGER}
-  </update>
-  <update id="updateByPrimaryKey" parameterType="org.example.demo.repository.entity.JoinUserRole">
+    <insert id="insertSelective" parameterType="org.example.demo.repository.entity.JoinUserRole">
+        insert into tbl_join_user_role
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="userId != null">
+                user_id,
+            </if>
+            <if test="roleId != null">
+                role_id,
+            </if>
+            <if test="id != null">
+                id,
+            </if>
+            <if test="createDate != null">
+                create_date,
+            </if>
+            <if test="updateDate != null">
+                update_date,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="userId != null">
+                #{userId,jdbcType=INTEGER},
+            </if>
+            <if test="roleId != null">
+                #{roleId,jdbcType=INTEGER},
+            </if>
+            <if test="id != null">
+                #{id,jdbcType=INTEGER},
+            </if>
+            <if test="createDate != null">
+                #{createDate,jdbcType=TIMESTAMP},
+            </if>
+            <if test="updateDate != null">
+                #{updateDate,jdbcType=TIMESTAMP},
+            </if>
+        </trim>
+    </insert>
+    <update id="updateByPrimaryKeySelective" parameterType="org.example.demo.repository.entity.JoinUserRole">
+        update tbl_join_user_role
+        <set>
+            <if test="id != null">
+                id = #{id,jdbcType=INTEGER},
+            </if>
+            <if test="createDate != null">
+                create_date = #{createDate,jdbcType=TIMESTAMP},
+            </if>
+            <if test="updateDate != null">
+                update_date = #{updateDate,jdbcType=TIMESTAMP},
+            </if>
+        </set>
+        where user_id = #{userId,jdbcType=INTEGER}
+        and role_id = #{roleId,jdbcType=INTEGER}
+    </update>
+    <update id="updateByPrimaryKey" parameterType="org.example.demo.repository.entity.JoinUserRole">
     update tbl_join_user_role
     set id = #{id,jdbcType=INTEGER},
       create_date = #{createDate,jdbcType=TIMESTAMP},

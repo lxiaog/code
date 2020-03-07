@@ -3,6 +3,8 @@ package org.example.demo.repository.dao;
 import org.apache.ibatis.annotations.Param;
 import org.example.demo.repository.entity.JoinPermissionRole;
 
+import java.util.List;
+
 public interface JoinPermissionRoleMapper {
     int deleteByPrimaryKey(@Param("roleId") Integer roleId, @Param("permissionId") String permissionId);
 
@@ -15,4 +17,7 @@ public interface JoinPermissionRoleMapper {
     int updateByPrimaryKeySelective(JoinPermissionRole record);
 
     int updateByPrimaryKey(JoinPermissionRole record);
+
+    List<JoinPermissionRole> queryListByRoleId(Integer roleId);
+
 }

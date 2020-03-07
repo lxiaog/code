@@ -13,6 +13,17 @@ public class JoinUserRole extends BasePage{
 
     private Date updateDate;
 
+    private Role role;
+
+
+    public Role getRole() {
+        return role;
+    }
+
+    public void setRole(Role role) {
+        this.role = role;
+    }
+
     public Integer getUserId() {
         return userId;
     }
@@ -51,5 +62,16 @@ public class JoinUserRole extends BasePage{
 
     public void setUpdateDate(Date updateDate) {
         this.updateDate = updateDate;
+    }
+
+    @Override
+    public String toString() {
+        return "JoinUserRole{" +
+                "userId=" + userId +
+                ", roleId=" + roleId +
+                ", id=" + id +
+                ", createDate=" + createDate +
+                ", updateDate=" + updateDate +
+                '}';
     }
 }

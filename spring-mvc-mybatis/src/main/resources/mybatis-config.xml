@@ -14,11 +14,14 @@
 
         <!-- 开启驼峰命名转换:Table{create_time} -> Entity{createTime} -->
         <setting name="mapUnderscoreToCamelCase" value="true"/>
-        <!--开启一级缓存-->
+        <!--开启二级级缓存-->
         <setting name="cacheEnabled" value="true"/>
         <!--打印SQL日志-->
         <!--<setting name="logImpl" value="STDOUT_LOGGING"/>-->
         <!--<setting name="logPrefix" value="dao."/>-->
+        <!--开启懒加载-->
+        <setting name="lazyLoadingEnabled" value="true"/>
+        <setting name="aggressiveLazyLoading" value="false"/>
     </settings>
     <!--配置多数据库-->
     <!--type="DB_VENDOR" 别名-->

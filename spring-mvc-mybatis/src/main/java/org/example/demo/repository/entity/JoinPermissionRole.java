@@ -13,6 +13,8 @@ public class JoinPermissionRole extends BasePage {
 
     private Date updateDate;
 
+    private Permission permission;
+
     public Integer getRoleId() {
         return roleId;
     }
@@ -26,7 +28,7 @@ public class JoinPermissionRole extends BasePage {
     }
 
     public void setPermissionId(String permissionId) {
-        this.permissionId = permissionId == null ? null : permissionId.trim();
+        this.permissionId = permissionId;
     }
 
     public Integer getId() {
@@ -51,5 +53,13 @@ public class JoinPermissionRole extends BasePage {
 
     public void setUpdateDate(Date updateDate) {
         this.updateDate = updateDate;
+    }
+
+    public Permission getPermission() {
+        return permission;
+    }
+
+    public void setPermission(Permission permission) {
+        this.permission = permission;
     }
 }

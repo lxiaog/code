@@ -151,6 +151,15 @@
             <version>2.0.0</version>
         </dependency>
 
+        <!-- mybatis-ehcache -->
+        <!-- http://mybatis.org/ehcache-cache/-->
+        <dependency>
+            <groupId>org.mybatis.caches</groupId>
+            <artifactId>mybatis-ehcache</artifactId>
+            <version>1.2.0</version>
+        </dependency>
+
+
         <!-- aspectj切面 -->
         <dependency>
             <groupId>org.aspectj</groupId>

@@ -1,6 +1,7 @@
 package org.example.demo.repository.entity;
 
 import java.util.Date;
+import java.util.List;
 
 public class User extends BasePage{
     private Integer id;
@@ -16,6 +17,16 @@ public class User extends BasePage{
     private Date updateDate;
 
     private String username;
+
+    private List<JoinUserRole> joinUserRoles;
+
+    public List<JoinUserRole> getJoinUserRoles() {
+        return joinUserRoles;
+    }
+
+    public void setJoinUserRoles(List<JoinUserRole> joinUserRoles) {
+        this.joinUserRoles = joinUserRoles;
+    }
 
     public Integer getId() {
         return id;

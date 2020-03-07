@@ -11,6 +11,8 @@ public interface RoleMapper {
 
     Role selectByPrimaryKey(Integer id);
 
+    Role queryRoleCollectionPermissions(Integer id);
+
     int updateByPrimaryKeySelective(Role record);
 
     int updateByPrimaryKey(Role record);
