@@ -5,6 +5,7 @@ import com.atguigu.atcrowdfunding.exception.code.BaseCode;
 
 /**
  * 判断条件失败之后抛出异常
+ * @author Work
  */
 public final class Preconditions {
     /**
